@@ -5,7 +5,7 @@ import com.restaurant.model.enums.OrderStatus;
 import java.time.LocalDateTime;
 
 public class Order {
-    private int id;
+    private int orderId;
     private int userId;
     private int tableId;
     private double totalAmount;
@@ -15,8 +15,8 @@ public class Order {
     public Order() {
     }
 
-    public Order(int id, int userId, int tableId, double totalAmount, OrderStatus status, LocalDateTime createdAt) {
-        this.id = id;
+    public Order(int orderId, int userId, int tableId, double totalAmount, OrderStatus status, LocalDateTime createdAt) {
+        this.orderId = orderId;
         this.userId = userId;
         this.tableId = tableId;
         this.totalAmount = totalAmount;
@@ -24,12 +24,12 @@ public class Order {
         this.createdAt = createdAt;
     }
 
-    public int getId() {
-        return id;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public int getUserId() {

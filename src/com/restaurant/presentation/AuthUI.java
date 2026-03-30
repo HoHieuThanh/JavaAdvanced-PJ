@@ -2,8 +2,11 @@ package com.restaurant.presentation;
 
 import com.restaurant.dao.UserDAO;
 import com.restaurant.model.entity.User;
+import com.restaurant.presentation.manager.ManagerUI;
 import com.restaurant.service.AuthService;
+import com.restaurant.util.Print;
 import com.restaurant.util.ValidatorUtil;
+import com.restaurant.presentation.customer.CustomerUI;
 
 import java.util.Scanner;
 
@@ -23,12 +26,12 @@ public class AuthUI {
             username = scanner.nextLine().trim();
 
             if (ValidatorUtil.isEmpty(username)) {
-                System.out.println("Tên đăng nhập không được để trống!");
+                Print.yellowText("Tên đăng nhập không được để trống!");
                 continue;
             }
 
             if (userDAO.findByUsername(username) != null) {
-                System.out.println("Tên đăng nhập đã tồn tại!");
+                Print.yellowText("Tên đăng nhập đã tồn tại!");
                 continue;
             }
 
@@ -41,12 +44,12 @@ public class AuthUI {
             password = scanner.nextLine();
 
             if (ValidatorUtil.isEmpty(password)) {
-                System.out.println("Mật khẩu không được để trống!");
+                Print.yellowText("Mật khẩu không được để trống!");
                 continue;
             }
 
             if (!ValidatorUtil.isValidPassword(password)) {
-                System.out.println("Mật khẩu phải có ít nhất 6 ký tự!");
+                Print.yellowText("Mật khẩu phải có ít nhất 6 ký tự!");
                 continue;
             }
 
@@ -59,7 +62,7 @@ public class AuthUI {
             fullName = scanner.nextLine().trim();
 
             if (ValidatorUtil.isEmpty(fullName)) {
-                System.out.println("Họ tên không được để trống!");
+                Print.yellowText("Họ tên không được để trống!");
                 continue;
             }
 
@@ -72,17 +75,17 @@ public class AuthUI {
             email = scanner.nextLine().trim();
 
             if (ValidatorUtil.isEmpty(email)) {
-                System.out.println("Email không được để trống!");
+                Print.yellowText("Email không được để trống!");
                 continue;
             }
 
             if (!ValidatorUtil.isValidEmail(email)) {
-                System.out.println("Email không đúng định dạng!");
+                Print.yellowText("Email không đúng định dạng!");
                 continue;
             }
 
             if (userDAO.findByEmail(email) != null) {
-                System.out.println("Email đã được sử dụng!");
+                Print.yellowText("Email đã được sử dụng!");
                 continue;
             }
 
@@ -95,21 +98,20 @@ public class AuthUI {
             phone = scanner.nextLine().trim();
 
             if (ValidatorUtil.isEmpty(phone)) {
-                System.out.println("Số điện thoại không được để trống!");
+                Print.yellowText("Số điện thoại không được để trống!");
                 continue;
             }
 
             if (!ValidatorUtil.isValidPhone(phone)) {
-                System.out.println("Số điện thoại phải gồm đúng 10 chữ số!");
+                Print.yellowText("Số điện thoại phải gồm đúng 10 chữ số!");
                 continue;
             }
 
             break;
         }
-
-        // Gọi service sau khi dữ liệu đã hợp lệ
         authService.registerCustomer(username, password, fullName, email, phone);
     }
+
     public void login() {
 
         System.out.println("===== ĐĂNG NHẬP =====");
@@ -121,7 +123,7 @@ public class AuthUI {
             username = scanner.nextLine().trim();
 
             if (ValidatorUtil.isEmpty(username)) {
-                System.out.println("Tên đăng nhập không được để trống!");
+                Print.yellowText("Tên đăng nhập không được để trống!");
                 continue;
             }
 
@@ -135,12 +137,12 @@ public class AuthUI {
             password = scanner.nextLine();
 
             if (ValidatorUtil.isEmpty(password)) {
-                System.out.println("Mật khẩu không được để trống!");
+                Print.yellowText("Mật khẩu không được để trống!");
                 continue;
             }
 
             if (!ValidatorUtil.isValidPassword(password)) {
-                System.out.println("Mật khẩu phải có ít nhất 6 ký tự!");
+                Print.yellowText("Mật khẩu phải có ít nhất 6 ký tự!");
                 continue;
             }
 
@@ -150,30 +152,32 @@ public class AuthUI {
         User user = authService.login(username, password);
 
         if (user == null) {
-            System.out.println("Tên đăng nhập hoặc mật khẩu không đúng!");
+            Print.yellowText("Tên đăng nhập hoặc mật khẩu không đúng!");
             return;
         }
 
         if (!user.isActive()) {
-            System.out.println("Tài khoản đã bị vô hiệu hóa!");
+            Print.yellowText("Tài khoản đã bị vô hiệu hóa!");
             return;
         }
 
-        System.out.println("Đăng nhập thành công! Xin chào: " + user.getFullName());
+        Print.greenText("Đăng nhập thành công! Xin chào: " + user.getFullName());
 
         switch (user.getRole()) {
             case MANAGER:
-                System.out.println("Bạn đang đăng nhập với quyền QUẢN LÝ");
+                Print.blueText("Bạn đang đăng nhập với quyền QUẢN LÝ");
                 new ManagerUI().menu();
                 break;
 
             case CHEF:
-                System.out.println("Bạn đang đăng nhập với quyền ĐẦU BẾP");
+                Print.blueText("Bạn đang đăng nhập với quyền ĐẦU BẾP");
                 break;
 
             case CUSTOMER:
-                System.out.println("Bạn đang đăng nhập với quyền KHÁCH HÀNG");
+                Print.blueText("Bạn đang đăng nhập với quyền KHÁCH HÀNG");
+                new CustomerUI(user.getId()).menu();
                 break;
+
         }
     }
 }

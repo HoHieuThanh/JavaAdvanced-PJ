@@ -10,7 +10,7 @@ public class PasswordHasher {
     // Hash password
     public static String hash(String plainPassword) {
         if (plainPassword == null || plainPassword.isEmpty()) {
-            throw new IllegalArgumentException("Mật khẩu không hợp lệ");
+            Print.redText("Mật khẩu không hợp lệ!");
         }
 
         return BCrypt.withDefaults()

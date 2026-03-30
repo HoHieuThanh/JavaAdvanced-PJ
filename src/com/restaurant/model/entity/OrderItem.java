@@ -4,29 +4,37 @@ package com.restaurant.model.entity;
 import com.restaurant.model.enums.OrderItemStatus;
 
 public class OrderItem {
-    private int id;
+    private int orderItemId;
     private int orderId;
-    private int menuItemId;
+    private int itemId;
     private int quantity;
     private OrderItemStatus status;
 
     public OrderItem() {
     }
 
-    public OrderItem(int id, int orderId, int menuItemId, int quantity, OrderItemStatus status) {
-        this.id = id;
+    public OrderItem(int orderItemId, int orderId, int itemId, int quantity, OrderItemStatus status) {
+        this.orderItemId = orderItemId;
         this.orderId = orderId;
-        this.menuItemId = menuItemId;
+        this.itemId = itemId;
         this.quantity = quantity;
         this.status = status;
     }
 
-    public int getId() {
-        return id;
+    public int getOrderItemId() {
+        return orderItemId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setOrderItemId(int orderItemId) {
+        this.orderItemId = orderItemId;
+    }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
 
     public int getOrderId() {
@@ -35,14 +43,6 @@ public class OrderItem {
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
-    }
-
-    public int getMenuItemId() {
-        return menuItemId;
-    }
-
-    public void setMenuItemId(int menuItemId) {
-        this.menuItemId = menuItemId;
     }
 
     public int getQuantity() {

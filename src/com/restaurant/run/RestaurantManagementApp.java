@@ -1,6 +1,8 @@
 package com.restaurant.run;
 
 import com.restaurant.presentation.AuthUI;
+import com.restaurant.util.InputValidate;
+import com.restaurant.util.Print;
 
 import java.util.Scanner;
 
@@ -12,14 +14,14 @@ public class RestaurantManagementApp {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("\n===== HỆ THỐNG NHÀ HÀNG =====");
-            System.out.println("1. Đăng nhập");
-            System.out.println("2. Đăng ký");
-            System.out.println("0. Thoát");
-
-            System.out.print("Chọn: ");
-            int choice = Integer.parseInt(scanner.nextLine());
-
+            System.out.println("""
+                    ===== HỆ THỐNG NHÀ HÀNG =====
+                    | 1. Đăng nhập              |
+                    | 2. Đăng ký khách hàng     |
+                    | 0. Thoát                  |
+                    =============================
+                    """);
+            int choice = InputValidate.getInteger(scanner, "Lựa chọn: ");
             switch (choice) {
                 case 1:
                     authUI.login();
@@ -28,10 +30,10 @@ public class RestaurantManagementApp {
                     authUI.register();
                     break;
                 case 0:
-                    System.out.println("Thoát chương trình!");
+                    Print.greenText("Thoát chương trình!");
                     return;
                 default:
-                    System.out.println("Lựa chọn không hợp lệ!");
+                    Print.invalidSelection();
             }
         }
     }

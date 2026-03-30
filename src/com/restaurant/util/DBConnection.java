@@ -16,7 +16,7 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
-            System.out.println("Lỗi kết nối database: " + e.getMessage());
+            System.out.println(Print.ANSI_RED + "Lỗi kết nối database: "  + e.getMessage() + Print.ANSI_RESET);
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -29,7 +29,7 @@ public class DBConnection {
             try {
                 conn.close();
             } catch (SQLException e) {
-                System.out.println("Lỗi đóng connection: " + e.getMessage());
+                System.out.println(Print.ANSI_RED + "Lỗi đóng connection: " + e.getMessage() + Print.ANSI_RESET );
             }
         }
     }
