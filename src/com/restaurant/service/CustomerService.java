@@ -24,16 +24,18 @@ public class CustomerService {
     public void showMenu() {
         List<MenuItem> list = menuDAO.findAll();
 
-        System.out.printf("%-5s %-20s %-10s %-10s\n",
-                "ID", "Tên", "Giá", "Loại");
+        System.out.println("============= MENU =============");
+        System.out.printf("| %-5s | %-20s | %-10s | %-10s |\n",
+                "Mã", "Tên", "Giá", "Loại");
 
         for (MenuItem m : list) {
-            System.out.printf("%-5d %-20s %-10.2f %-10s\n",
-                    m.getId(),
+            System.out.printf("| %-5d | %-20s | %-10.2f | %-10s |\n",
+                    m.getItemId(),
                     m.getName(),
                     m.getPrice(),
                     m.getCategory());
         }
+        System.out.println("================================");
     }
 
 

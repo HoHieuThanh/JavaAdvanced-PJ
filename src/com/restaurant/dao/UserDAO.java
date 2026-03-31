@@ -3,6 +3,7 @@ package com.restaurant.dao;
 import com.restaurant.model.entity.User;
 import com.restaurant.model.enums.UserRole;
 import com.restaurant.util.DBConnection;
+import com.restaurant.util.Print;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,7 +28,7 @@ public class UserDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Print.redText("Lỗi kiểm tra username!");
         }
 
         return null;
@@ -50,7 +51,7 @@ public class UserDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Print.redText("Lỗi thêm người dùng!");
         }
 
         return false;
@@ -71,12 +72,32 @@ public class UserDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Print.redText("Lỗi kiểm tra email!");
         }
 
         return null;
     }
 
+    // Check sdt
+    public User findByPhone(String phone) {
+        String sql = "SELECT * FROM users WHERE phone = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToUser(rs);
+            }
+
+        } catch (Exception e) {
+            Print.redText("Lỗi kiểm tra số điện thoại!");
+        }
+
+        return null;
+    }
 
     // Map dữ liệu
     private User mapResultSetToUser(ResultSet rs) throws SQLException {

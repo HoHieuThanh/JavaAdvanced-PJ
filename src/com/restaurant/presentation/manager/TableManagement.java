@@ -3,6 +3,8 @@ package com.restaurant.presentation.manager;
 import com.restaurant.model.entity.RestaurantTable;
 import com.restaurant.model.enums.TableStatus;
 import com.restaurant.service.TableService;
+import com.restaurant.util.InputValidate;
+import com.restaurant.util.Print;
 
 import java.util.List;
 import java.util.Scanner;
@@ -15,116 +17,66 @@ public class TableManagement {
         List<RestaurantTable> list = tableService.getAll();
 
         if (list.isEmpty()) {
-            System.out.println("Không có bàn nào!");
+            Print.blueText("Không có bàn nào!");
             return;
         }
 
-        System.out.println("\n===== DANH SÁCH BÀN =====");
+        System.out.println("\n============== DANH SÁCH BÀN ==============");
         displayListTable(list);
     }
 
 
      void addTable() {
-        System.out.print("Số bàn: ");
-        int number = Integer.parseInt(scanner.nextLine());
-
-        int capacity;
-        while (true) {
-            System.out.print("Sức chứa: ");
-            capacity = Integer.parseInt(scanner.nextLine());
-
-            if (capacity < 0) {
-                System.out.println("Không hợp lệ!");
-            } else break;
-        }
-
-        tableService.addTable(number, capacity);
-    }
+         RestaurantTable table = TableForm.inputTable(scanner, "THÊM BÀN", null, tableService);
+         tableService.addTable(table.getTableNumber(), table.getCapacity());
+     }
 
 
      void updateTable() {
-
-        System.out.print("Nhập ID bàn: ");
-        int id = Integer.parseInt(scanner.nextLine());
-
-        RestaurantTable t = tableService.findById(id);
-
-        if (t == null) {
-            System.out.println("Không tìm thấy bàn!");
-            return;
-        }
-
-        // Hiển thị cũ
-        System.out.println("Số bàn: " + t.getTableNumber());
-        System.out.println("Sức chứa: " + t.getCapacity());
-        System.out.println("Trạng thái: " + t.getStatus());
-
-        System.out.print("Số bàn mới: ");
-        int number = Integer.parseInt(scanner.nextLine());
-
-        int capacity;
-        while (true) {
-            System.out.print("Sức chứa mới: ");
-            capacity = Integer.parseInt(scanner.nextLine());
-
-            if (capacity < 0) {
-                System.out.println("Không hợp lệ!");
-            } else break;
-        }
-
-        // chọn status
-        System.out.println("Trạng thái:");
-        System.out.println("1. AVAILABLE");
-        System.out.println("2. OCCUPIED");
-        System.out.println("3. RESERVED");
-
-        int choice = Integer.parseInt(scanner.nextLine());
-
-        TableStatus status = switch (choice) {
-            case 1 -> TableStatus.AVAILABLE;
-            case 2 -> TableStatus.OCCUPIED;
-            case 3 -> TableStatus.RESERVED;
-            default -> TableStatus.AVAILABLE;
-        };
-
-        tableService.updateTable(id, number, capacity, status);
-    }
+         int id = InputValidate.getInteger(scanner, "Nhập ID bàn: ");
+         RestaurantTable oldTable = tableService.findById(id);
+         if (oldTable == null) {
+             Print.yellowText("Không tìm thấy bàn!");
+             return;
+         }
+         RestaurantTable updated = TableForm.inputTable(scanner, "SỬA BÀN", oldTable, tableService);
+         tableService.updateTable(updated);
+     }
 
      void deleteTable() {
-
-        System.out.print("Nhập ID bàn cần xóa: ");
-        int id = Integer.parseInt(scanner.nextLine());
+         int id = InputValidate.getInteger(scanner, "Nhập ID bàn cần xóa: ");
 
         RestaurantTable t = tableService.findById(id);
 
         if (t == null) {
-            System.out.println("Không tìm thấy bàn!");
+            Print.yellowText("Không tìm thấy bàn!");
             return;
         }
-
-        System.out.print("Bạn có chắc muốn xóa bàn " + t.getTableNumber() + "? (1/0): ");
-        int confirm = Integer.parseInt(scanner.nextLine());
-
-        if (confirm != 1) {
-            System.out.println("Đã hủy!");
-            return;
+        while (true) {
+            int confirm = InputValidate.getInteger(scanner,
+                    "Bạn có chắc muốn xóa bàn " + t.getTableNumber() + "? (1/0): ");
+            if (confirm == 0) {
+                Print.greenText("Đã hủy!");
+                return;
+            }else if (confirm == 1) break;
+            else {
+                Print.yellowText("Lựa chọn không hợp lệ!");
+            }
         }
-
         tableService.deleteTable(id);
     }
 
     // tìm bàn theo tt
      void searchTableByStatus() {
 
-        System.out.println("Chọn trạng thái:");
-        System.out.println("1. AVAILABLE");
-        System.out.println("2. OCCUPIED");
-        System.out.println("3. RESERVED");
-
-        int choice = Integer.parseInt(scanner.nextLine());
-
+         System.out.println("""
+                 Chọn trạng thái:
+                 1. AVAILABLE
+                 2. OCCUPIED
+                 3. RESERVED
+                 """);
+         int choice = InputValidate.getInteger(scanner, "Lựa chọn: ");
         TableStatus status;
-
         switch (choice) {
             case 1:
                 status = TableStatus.AVAILABLE;
@@ -136,32 +88,35 @@ public class TableManagement {
                 status = TableStatus.RESERVED;
                 break;
             default:
-                System.out.println("Lựa chọn không hợp lệ!");
+                Print.invalidSelection();
                 return;
         }
 
         List<RestaurantTable> list = tableService.findByStatus(status);
 
         if (list.isEmpty()) {
-            System.out.println("Không tìm thấy bàn nào!");
+            Print.yellowText("Không tìm thấy bàn nào!");
             return;
         }
 
-        System.out.println("\n===== KẾT QUẢ =====");
+         System.out.println("\n================= KẾT QUẢ =================");
         displayListTable(list);
 
     }
 
     void displayListTable(List<RestaurantTable> list){
-        System.out.printf("| %-5s | %-10s | %-10s | %-15s |\n",
+        String line = "|----+------------+----------+------------|";
+        System.out.printf("| %-2s | %-10s | %-8s | %-10s |\n",
                 "ID", "Số bàn", "Sức chứa", "Trạng thái");
+        System.out.println(line);
 
         for (RestaurantTable t : list) {
-            System.out.printf("| %-5d | %-10d | %-10d | %-15s |\n",
+            System.out.printf("| %-2d | %-10d | %-8d | %-10s |\n",
                     t.getId(),
                     t.getTableNumber(),
                     t.getCapacity(),
                     t.getStatus());
+            System.out.println(line);
         }
-    }
+     }
 }

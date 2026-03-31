@@ -15,9 +15,12 @@ public class RestaurantManagementApp {
 
         while (true) {
             System.out.println("""
+                    
                     ===== HỆ THỐNG NHÀ HÀNG =====
                     | 1. Đăng nhập              |
+                    |---------------------------|
                     | 2. Đăng ký khách hàng     |
+                    |---------------------------|
                     | 0. Thoát                  |
                     =============================
                     """);

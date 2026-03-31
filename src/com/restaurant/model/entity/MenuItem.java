@@ -2,10 +2,8 @@ package com.restaurant.model.entity;
 
 import com.restaurant.model.enums.MenuCategory;
 
-import java.math.BigDecimal;
-
 public class MenuItem {
-    private int id;
+    private int itemId;
     private String name;
     private double price;
     private MenuCategory category;
@@ -15,8 +13,8 @@ public class MenuItem {
     public MenuItem() {
     }
 
-    public MenuItem(int id, String name, double price, MenuCategory category, Integer stock, boolean isAvailable) {
-        this.id = id;
+    public MenuItem(int itemId, String name, double price, MenuCategory category, Integer stock, boolean isAvailable) {
+        this.itemId = itemId;
         this.name = name;
         this.price = price;
         this.category = category;
@@ -24,12 +22,12 @@ public class MenuItem {
         this.isAvailable = isAvailable;
     }
 
-    public int getId() {
-        return id;
+    public int getItemId() {
+        return itemId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
 
     public String getName() {

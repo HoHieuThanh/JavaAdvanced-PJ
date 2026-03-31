@@ -3,6 +3,7 @@ package com.restaurant.dao;
 import com.restaurant.model.entity.RestaurantTable;
 import com.restaurant.model.enums.TableStatus;
 import com.restaurant.util.DBConnection;
+import com.restaurant.util.Print;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class TableDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Print.redText("Lỗi cập nhật bàn!");
         }
         return false;
     }
@@ -100,7 +101,7 @@ public class TableDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Print.redText("Lỗi kết nối dữ liệu Bàn!");
         }
 
         return list;

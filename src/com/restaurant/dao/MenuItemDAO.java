@@ -3,6 +3,7 @@ package com.restaurant.dao;
 import com.restaurant.model.entity.MenuItem;
 import com.restaurant.model.enums.MenuCategory;
 import com.restaurant.util.DBConnection;
+import com.restaurant.util.Print;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -55,12 +56,12 @@ public class MenuItemDAO {
             }
 
             ps.setBoolean(5, item.isAvailable());
-            ps.setInt(6, item.getId());
+            ps.setInt(6, item.getItemId());
 
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Print.redText("Lỗi cập nhật món!");
         }
         return false;
     }
@@ -120,7 +121,7 @@ public class MenuItemDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Print.redText("Lỗi tìm kiếm!");
         }
 
         return null;
@@ -142,7 +143,7 @@ public class MenuItemDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Print.redText("Lỗi tìm kiếm!");
         }
 
         return list;
@@ -153,7 +154,7 @@ public class MenuItemDAO {
     private MenuItem mapResultSet(ResultSet rs) throws SQLException {
         MenuItem item = new MenuItem();
 
-        item.setId(rs.getInt("item_id"));
+        item.setItemId(rs.getInt("item_id"));
         item.setName(rs.getString("name"));
         item.setCategory(MenuCategory.valueOf(rs.getString("category")));
         item.setPrice(rs.getDouble("price"));

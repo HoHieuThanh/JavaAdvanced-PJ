@@ -22,13 +22,21 @@ public class CustomerUI {
 
     public void menu() {
         while (true) {
-            Print.blueText("\n===== KHÁCH HÀNG =====");
-            System.out.println("1. Xem bàn trống");
-            System.out.println("2. Chọn bàn & tạo order");
-            System.out.println("3. Xem menu & gọi món");
-            System.out.println("4. Xem món đã gọi");
-            System.out.println("5. Hủy món");
-            System.out.println("0. Thoát");
+            System.out.println("""
+                    ======== KHÁCH HÀNG ========
+                    | 1. Xem bàn trống         |
+                    |--------------------------|
+                    | 2. Chọn bàn & tạo order  |
+                    |--------------------------|
+                    | 3. Xem menu & gọi món    |
+                    |--------------------------|
+                    | 4. Xem món đã gọi        |
+                    |--------------------------|
+                    | 5. Hủy món               |
+                    |--------------------------|
+                    | 0. Thoát                 |
+                    ============================
+                    """);
 
             int choice = InputValidate.getInteger(scanner, "Chọn: ");
 
@@ -65,15 +73,16 @@ public class CustomerUI {
             return;
         }
 
-        Print.greenText("Danh sách bàn trống:");
-        System.out.printf("%-5s %-10s %-10s\n", "ID", "Số bàn", "Sức chứa");
+        Print.greenText("=== Danh sách bàn trống ===");
+        System.out.printf("| %-5s | %-10s | %-10s |\n", "Mã", "Số bàn", "Sức chứa");
 
         for (RestaurantTable t : tables) {
-            System.out.printf("%-5d %-10d %-10d\n",
+            System.out.printf("| %-5d | %-10d | %-10d |\n",
                     t.getId(),
                     t.getTableNumber(),
                     t.getCapacity());
         }
+        System.out.println("=====================");
     }
 
     // 2. CHỌN BÀN + TẠO ORDER

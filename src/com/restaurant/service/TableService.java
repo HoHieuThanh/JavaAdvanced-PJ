@@ -3,6 +3,7 @@ package com.restaurant.service;
 import com.restaurant.dao.TableDAO;
 import com.restaurant.model.entity.RestaurantTable;
 import com.restaurant.model.enums.TableStatus;
+import com.restaurant.util.Print;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class TableService {
     public RestaurantTable findById(int id) {
         return tableDAO.findById(id);
     }
+
+    // check trùng số bàn
+    public RestaurantTable findByTableNumber(int tableNumber){return  tableDAO.findByTableNumber(tableNumber);}
 
     // thêm bàn
     public void addTable(int number, int capacity) {
@@ -41,39 +45,26 @@ public class TableService {
         boolean result = tableDAO.insert(table);
 
         if (result) {
-            System.out.println("Thêm bàn thành công!");
+            Print.greenText("Thêm bàn thành công!");
         } else {
-            System.out.println("Thêm bàn thất bại!");
+            Print.redText("Thêm bàn thất bại!");
         }
     }
 
     // sửa bàn
-    public void updateTable(int id, int number, int capacity, TableStatus status) {
-
-        RestaurantTable existing = tableDAO.findById(id);
-
-        if (existing == null) {
-            System.out.println("Không tìm thấy bàn!");
-            return;
-        }
-
-        if (capacity <= 0) {
-            System.out.println("Sức chứa không hợp lệ!");
-            return;
-        }
-
+    public void updateTable(RestaurantTable tableUpdated) {
         RestaurantTable table = new RestaurantTable();
-        table.setId(id);
-        table.setTableNumber(number);
-        table.setCapacity(capacity);
-        table.setStatus(status);
+        table.setId(tableUpdated.getId());
+        table.setTableNumber(tableUpdated.getTableNumber());
+        table.setCapacity(tableUpdated.getCapacity());
+        table.setStatus(tableUpdated.getStatus());
 
         boolean result = tableDAO.update(table);
 
         if (result) {
-            System.out.println("Cập nhật bàn thành công!");
+            Print.greenText("Cập nhật bàn thành công!");
         } else {
-            System.out.println("Cập nhật thất bại!");
+            Print.redText("Cập nhật thất bại!");
         }
     }
 
@@ -83,16 +74,16 @@ public class TableService {
         RestaurantTable existing = tableDAO.findById(id);
 
         if (existing == null) {
-            System.out.println("Không tìm thấy bàn!");
+           Print.yellowText("Không tìm thấy bàn!");
             return;
         }
 
         boolean result = tableDAO.delete(id);
 
         if (result) {
-            System.out.println("Xóa bàn thành công!");
+            Print.greenText("Xóa bàn thành công!");
         } else {
-            System.out.println("Xóa bàn thất bại!");
+            Print.redText("Xóa bàn thất bại!");
         }
     }
 

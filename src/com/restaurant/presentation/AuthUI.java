@@ -4,6 +4,7 @@ import com.restaurant.dao.UserDAO;
 import com.restaurant.model.entity.User;
 import com.restaurant.presentation.manager.ManagerUI;
 import com.restaurant.service.AuthService;
+import com.restaurant.util.InputValidate;
 import com.restaurant.util.Print;
 import com.restaurant.util.ValidatorUtil;
 import com.restaurant.presentation.customer.CustomerUI;
@@ -22,8 +23,7 @@ public class AuthUI {
 
         String username;
         while (true) {
-            System.out.print("Nhập tên đăng nhập: ");
-            username = scanner.nextLine().trim();
+            username = InputValidate.getString(scanner, "Nhập tên đăng nhập: ");
 
             if (ValidatorUtil.isEmpty(username)) {
                 Print.yellowText("Tên đăng nhập không được để trống!");
@@ -40,8 +40,7 @@ public class AuthUI {
 
         String password;
         while (true) {
-            System.out.print("Nhập mật khẩu: ");
-            password = scanner.nextLine();
+            password = InputValidate.getString(scanner, "Nhập mật khẩu: ");
 
             if (ValidatorUtil.isEmpty(password)) {
                 Print.yellowText("Mật khẩu không được để trống!");
@@ -58,8 +57,7 @@ public class AuthUI {
 
         String fullName;
         while (true) {
-            System.out.print("Nhập họ tên: ");
-            fullName = scanner.nextLine().trim();
+            fullName = InputValidate.getString(scanner,"Nhập họ tên: " );
 
             if (ValidatorUtil.isEmpty(fullName)) {
                 Print.yellowText("Họ tên không được để trống!");
@@ -71,8 +69,7 @@ public class AuthUI {
 
         String email;
         while (true) {
-            System.out.print("Nhập email: ");
-            email = scanner.nextLine().trim();
+            email = InputValidate.getString(scanner,"Nhập email: " );
 
             if (ValidatorUtil.isEmpty(email)) {
                 Print.yellowText("Email không được để trống!");
@@ -94,8 +91,7 @@ public class AuthUI {
 
         String phone;
         while (true) {
-            System.out.print("Nhập số điện thoại: ");
-            phone = scanner.nextLine().trim();
+            phone = InputValidate.getString(scanner, "Nhập số điện thoại: ");
 
             if (ValidatorUtil.isEmpty(phone)) {
                 Print.yellowText("Số điện thoại không được để trống!");
@@ -104,6 +100,11 @@ public class AuthUI {
 
             if (!ValidatorUtil.isValidPhone(phone)) {
                 Print.yellowText("Số điện thoại phải gồm đúng 10 chữ số!");
+                continue;
+            }
+
+            if (userDAO.findByPhone(phone) != null) {
+                Print.yellowText("Số điện thoại đã được sử dụng!");
                 continue;
             }
 
@@ -119,8 +120,7 @@ public class AuthUI {
         String username;
 
         while (true) {
-            System.out.print("Nhập tên đăng nhập: ");
-            username = scanner.nextLine().trim();
+            username = InputValidate.getString(scanner, "Nhập tên đăng nhập: ");
 
             if (ValidatorUtil.isEmpty(username)) {
                 Print.yellowText("Tên đăng nhập không được để trống!");
@@ -133,8 +133,7 @@ public class AuthUI {
         String password;
 
         while (true) {
-            System.out.print("Nhập mật khẩu: ");
-            password = scanner.nextLine();
+            password = InputValidate.getString(scanner, "Nhập mật khẩu: ");
 
             if (ValidatorUtil.isEmpty(password)) {
                 Print.yellowText("Mật khẩu không được để trống!");
@@ -150,18 +149,10 @@ public class AuthUI {
         }
 
         User user = authService.login(username, password);
-
         if (user == null) {
-            Print.yellowText("Tên đăng nhập hoặc mật khẩu không đúng!");
             return;
         }
-
-        if (!user.isActive()) {
-            Print.yellowText("Tài khoản đã bị vô hiệu hóa!");
-            return;
-        }
-
-        Print.greenText("Đăng nhập thành công! Xin chào: " + user.getFullName());
+        Print.greenText("\nĐăng nhập thành công! Xin chào: " + user.getFullName());
 
         switch (user.getRole()) {
             case MANAGER:

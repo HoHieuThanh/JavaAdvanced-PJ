@@ -2,44 +2,22 @@ package com.restaurant.service;
 
 import com.restaurant.dao.MenuItemDAO;
 import com.restaurant.model.entity.MenuItem;
-import com.restaurant.model.enums.MenuCategory;
+import com.restaurant.util.Print;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MenuService {
 
     private MenuItemDAO menuDAO = new MenuItemDAO();
 
     // thêm món
-    public void addItem(String name, double price, int categoryChoice, Integer stock, boolean isAvailable) {
-
-        if (price <= 0) {
-            System.out.println("Giá không hợp lệ!");
-            return;
-        }
-
-        MenuCategory category;
-
-        if (categoryChoice == 1) {
-            category = MenuCategory.FOOD;
-            stock = null; // FOOD không có tồn kho
-        } else {
-            category = MenuCategory.DRINK;
-        }
-
-        MenuItem item = new MenuItem();
-        item.setName(name);
-        item.setPrice(price);
-        item.setCategory(category);
-        item.setStock(stock);
-        item.setAvailable(isAvailable);
-
+    public void addItem(MenuItem item) {
         boolean result = menuDAO.insert(item);
-
         if (result) {
-            System.out.println("Thêm món thành công!");
+            Print.greenText("Thêm món thành công!");
         } else {
-            System.out.println("Thêm món thất bại!");
+            Print.redText("Thêm món thất bại!");
         }
     }
 
@@ -50,75 +28,45 @@ public class MenuService {
     }
 
     // cập nhật món
-    public void updateFull(int id, String name, double price, int categoryChoice, Integer stock, boolean isAvailable) {
-
-        MenuItem existing = menuDAO.findById(id);
-
-        if (existing == null) {
-            System.out.println("Không tìm thấy món!");
-            return;
-        }
-
-        if (price <= 0) {
-            System.out.println("Giá không hợp lệ!");
-            return;
-        }
-
-        MenuCategory category;
-
-        if (categoryChoice == 1) {
-            category = MenuCategory.FOOD;
-            stock = null;
+    public void updateItem(int id, MenuItem itemUpdate) {
+        MenuItem oldItem = menuDAO.findById(id);
+        boolean result = menuDAO.update(itemUpdate);
+        if (isSame(oldItem, itemUpdate)) {
+            Print.blueText("Không có thay đổi nào.");
+        } else if (result) {
+            Print.greenText("Sửa món thành công!");
         } else {
-            category = MenuCategory.DRINK;
+            Print.redText("Sửa món thất bại!");
         }
 
-        MenuItem item = new MenuItem();
-        item.setId(id);
-        item.setName(name);
-        item.setPrice(price);
-        item.setCategory(category);
-        item.setStock(stock);
-        item.setAvailable(isAvailable);
-
-        boolean result = menuDAO.update(item);
-
-        if (result) {
-            System.out.println("Sửa món thành công!");
-        } else {
-            System.out.println("Sửa món thất bại!");
-        }
     }
+
+    private boolean isSame(MenuItem oldItem, MenuItem newItem) {
+        return oldItem.getName().equals(newItem.getName())
+                && oldItem.getPrice() == newItem.getPrice()
+                && oldItem.getCategory() == newItem.getCategory()
+                && Objects.equals(oldItem.getStock(), newItem.getStock())
+                && oldItem.isAvailable() == newItem.isAvailable();
+    }
+
 
     // xoá món
     public void deleteItem(int id) {
-
-        MenuItem item = menuDAO.findById(id);
-
-        if (item == null) {
-            System.out.println("Không tìm thấy món!");
-            return;
-        }
-
         boolean result = menuDAO.delete(id);
-
         if (result) {
-            System.out.println("Xóa món thành công!");
+            Print.greenText("Xóa món thành công!");
         } else {
-            System.out.println("Xóa món thất bại!");
+            Print.redText("Xóa món thất bại!");
         }
     }
+
+    // tìm món theo id
     public MenuItem findById(int id) {
         return menuDAO.findById(id);
     }
 
+    // tìm món theo tên
     public List<MenuItem> searchByName(String keyword) {
-
-        if (keyword == null || keyword.trim().isEmpty()) {
-            System.out.println("Tên tìm kiếm không được để trống!");
-            return null;
-        }
-
         return menuDAO.searchByName(keyword);
     }
 

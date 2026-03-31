@@ -1,10 +1,5 @@
 package com.restaurant.presentation.manager;
 
-import com.restaurant.model.entity.MenuItem;
-import com.restaurant.model.entity.RestaurantTable;
-import com.restaurant.model.enums.TableStatus;
-import com.restaurant.service.MenuService;
-import com.restaurant.service.TableService;
 import com.restaurant.util.InputValidate;
 import com.restaurant.util.Print;
 
@@ -19,9 +14,12 @@ public class ManagerUI {
     public void menu() {
         while (true) {
             System.out.println("""
+                    
                     ===== QUẢN LÝ NHÀ HÀNG =====
                     | 1. Quản lý thực đơn      |
+                    |--------------------------|
                     | 2. Quản lý bàn           |
+                    |--------------------------|
                     | 0. Đăng xuất             |
                     ============================
                     """);
@@ -46,12 +44,18 @@ public class ManagerUI {
         while (true) {
 
             System.out.println("""
+                    
                     ===== QUẢN LÝ THỰC ĐƠN =====
                     | 1. Xem danh sách món     |
+                    |--------------------------|
                     | 2. Thêm món              |
+                    |--------------------------|
                     | 3. Sửa món               |
+                    |--------------------------|
                     | 4. Xóa món               |
+                    |--------------------------|
                     | 5. Tìm kiếm món theo tên |
+                    |--------------------------|
                     | 0. Quay lại              |
                     ============================
                     """);
@@ -91,12 +95,18 @@ public class ManagerUI {
     private void tableManagement() {
         while (true) {
             System.out.println("""
+                    
                     ======== QUẢN LÝ BÀN ========
                     | 1. Xem danh sách bàn      |
+                    |---------------------------|
                     | 2. Thêm bàn               |
+                    |---------------------------|
                     | 3. Sửa bàn                |
+                    |---------------------------|
                     | 4. Xóa bàn                |
+                    |---------------------------|
                     | 5. Tìm bàn theo trạng thái|
+                    |---------------------------|
                     | 0. Quay lại               |
                     =============================
                     """);
