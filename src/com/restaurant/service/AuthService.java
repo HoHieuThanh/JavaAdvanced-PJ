@@ -2,37 +2,24 @@ package com.restaurant.service;
 
 import com.restaurant.dao.UserDAO;
 import com.restaurant.model.entity.User;
-import com.restaurant.model.enums.UserRole;
 import com.restaurant.util.PasswordHasher;
 import com.restaurant.util.Print;
-import com.restaurant.util.ValidatorUtil;
 
 public class AuthService {
 
     private UserDAO userDAO = new UserDAO();
 
     // Đăng ký (Customer)
-    public boolean registerCustomer(String username, String password,
-                                    String fullName, String email, String phone) {
-
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(PasswordHasher.hash(password));
-        user.setFullName(fullName);
-        user.setEmail(email);
-        user.setPhone(phone);
-        user.setRole(UserRole.CUSTOMER);
-        user.setActive(true);
-
+    public void registerCustomer(User user) {
+        user.setPassword(PasswordHasher.hash(user.getPassword()));
         boolean result = userDAO.insert(user);
 
         if (result) {
-            System.out.println("Đăng ký tài khoản thành công!");
+            Print.greenText("Đăng ký tài khoản thành công!");
         } else {
-            System.out.println("Đăng ký thất bại!");
+            Print.redText("Đăng ký thất bại!");
         }
 
-        return result;
     }
 
 

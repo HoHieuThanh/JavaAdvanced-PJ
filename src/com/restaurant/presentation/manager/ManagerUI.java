@@ -11,6 +11,7 @@ public class ManagerUI {
     Scanner scanner = new Scanner(System.in);
     MenuManagement menuManagement = new MenuManagement();
     TableManagement tableManagement = new TableManagement();
+    ManagerManagement managerManagement = new ManagerManagement();
     public void menu() {
         while (true) {
             System.out.println("""
@@ -19,6 +20,8 @@ public class ManagerUI {
                     | 1. Quản lý thực đơn      |
                     |--------------------------|
                     | 2. Quản lý bàn           |
+                    |--------------------------|
+                    | 3. Quản lý người dùng    |
                     |--------------------------|
                     | 0. Đăng xuất             |
                     ============================
@@ -31,6 +34,9 @@ public class ManagerUI {
                 case 2:
                     tableManagement();
                     break;
+                case 3:
+                    userManagement();
+                    break;
                 case 0:
                     Print.greenText("Đã đăng xuất!");
                     return;
@@ -40,7 +46,7 @@ public class ManagerUI {
         }
     }
 
-    private void menuManagement() {
+    void menuManagement() {
         while (true) {
 
             System.out.println("""
@@ -92,7 +98,7 @@ public class ManagerUI {
 
 
 
-    private void tableManagement() {
+    void tableManagement() {
         while (true) {
             System.out.println("""
                     
@@ -136,4 +142,41 @@ public class ManagerUI {
             }
         }
     }
+
+    void userManagement() {
+
+        while (true) {
+            System.out.println("""
+                
+                ======= QUẢN LÝ NGƯỜI DÙNG =======
+                | 1. Tạo tài khoản               |
+                |--------------------------------|
+                | 2. Xem danh sách user          |
+                |--------------------------------|
+                | 3. Khóa tài khoản              |
+                |--------------------------------|
+                | 0. Thoát                       |
+                ==================================
+                """);
+
+            int choice = InputValidate.getInteger(scanner, "Chọn: ");
+
+            switch (choice) {
+                case 1 :
+                    managerManagement.createStaff();
+                    break;
+                case 2 :
+                    managerManagement.viewUsersByRole();
+                    break;
+                case 3 :
+                    managerManagement.lockUser();
+                    break;
+                case 0 :
+                    return;
+                default:
+                    Print.invalidSelection();
+            }
+        }
+    }
+
 }

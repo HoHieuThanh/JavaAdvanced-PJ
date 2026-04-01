@@ -9,8 +9,32 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
+
+    // Tìm user theo id
+    public User findById(int userId) {
+        String sql = "SELECT * FROM users WHERE user_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToUser(rs);
+            }
+
+        } catch (Exception e) {
+            Print.redText("Lỗi kiểm tra ID!");
+        }
+
+        return null;
+    }
 
     // Tìm user theo username
     public User findByUsername(String username) {
@@ -98,6 +122,60 @@ public class UserDAO {
 
         return null;
     }
+
+    public List<User> findByRole(UserRole role) {
+
+        List<User> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM users WHERE role = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, role.name());
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User u = new User();
+
+                u.setId(rs.getInt("user_id"));
+                u.setUsername(rs.getString("username"));
+                u.setFullName(rs.getString("full_name"));
+                u.setEmail(rs.getString("email"));
+                u.setPhone(rs.getString("phone"));
+                u.setRole(UserRole.valueOf(rs.getString("role")));
+                u.setActive(rs.getBoolean("is_active"));
+
+                list.add(u);
+            }
+
+        } catch (Exception e) {
+            Print.redText("Lỗi lấy danh sách user!");
+        }
+
+        return list;
+    }
+
+    public boolean updateStatus(int userId, boolean status) {
+
+        String sql = "UPDATE users SET is_active = ? WHERE user_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setBoolean(1, status);
+            ps.setInt(2, userId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            Print.redText("Lỗi cập nhật trạng thái!");
+        }
+
+        return false;
+    }
+
 
     // Map dữ liệu
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
